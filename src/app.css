@@ -1,0 +1,31 @@
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+@plugin "daisyui" {
+	themes:
+		winter --default,
+		winter;
+	exclude: rootscrollgutter;
+}
+
+* {
+	font-family: 'DM Sans', sans-serif;
+}
+
+.title-font {
+	font-family: 'DM Serif Display', serif;
+}
+
+.dropzone_dragover {
+	@apply border-primary bg-primary/5;
+}
+
+input:focus {
+	--tw-ring-color: transparent;
+}
+
+.divider-thin::after {
+	height: calc(0.07rem) !important;
+}
