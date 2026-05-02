@@ -1,5 +1,7 @@
 <script lang="ts">
-	import Pagination from '$lib/components/features/pagination/Pagination.svelte';
+	import { toast } from '$lib/stores/toast';
+import Tooltip from '$lib/components/ui/Tooltip.svelte';
+import Pagination from '$lib/components/features/pagination/Pagination.svelte';
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { date } from '$lib/utils/helper';
@@ -143,7 +145,12 @@
 			</div>
 
 			<form method="POST" action="?/create" use:enhance={() => {
-				return async ({ update }) => { await update(); show_modal = false; };
+				return async ({ result, update }) => {
+					if (result.type === 'success') toast.success('Lab test requested.');
+					if (result.type === 'failure') toast.error('Failed to request test.');
+					await update({ reset: result.type === 'success' });
+					if (result.type === 'success') { show_modal = false; }
+				};
 			}} class="grid grid-cols-2 gap-3 ev-fade-up">
 				<fieldset class="fieldset">
 					<legend class="fieldset-legend">Owner *</legend>
@@ -215,7 +222,12 @@
 		<div class="modal-box max-w-md">
 			<h3 class="text-lg font-bold mb-4">Update — {result_target.name}</h3>
 			<form method="POST" action="?/update_result" use:enhance={() => {
-				return async ({ update }) => { await update(); show_result_modal = false; result_target = null; };
+				return async ({ result, update }) => {
+					if (result.type === 'success') toast.success('Result updated.');
+					if (result.type === 'failure') toast.error('Failed to update result.');
+					await update({ reset: result.type === 'success' });
+					if (result.type === 'success') { show_result_modal = false; result_target = null; }
+				};
 			}} class="flex flex-col gap-3">
 				<input type="hidden" name="id" value={result_target.id} />
 				<fieldset class="fieldset">

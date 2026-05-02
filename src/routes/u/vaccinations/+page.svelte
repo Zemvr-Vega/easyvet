@@ -1,5 +1,7 @@
 <script lang="ts">
-	import Pagination from '$lib/components/features/pagination/Pagination.svelte';
+	import { toast } from '$lib/stores/toast';
+import Tooltip from '$lib/components/ui/Tooltip.svelte';
+import Pagination from '$lib/components/features/pagination/Pagination.svelte';
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { date } from '$lib/utils/helper';
@@ -153,7 +155,12 @@
 			</div>
 
 			<form method="POST" action="?/create" use:enhance={() => {
-				return async ({ update }) => { await update(); show_modal = false; };
+				return async ({ result, update }) => {
+					if (result.type === 'success') toast.success('Vaccination record saved.');
+					if (result.type === 'failure') toast.error('Failed to save vaccination.');
+					await update({ reset: result.type === 'success' });
+					if (result.type === 'success') { show_modal = false; }
+				};
 			}} class="grid grid-cols-2 gap-3 ev-fade-up">
 				<fieldset class="fieldset">
 					<legend class="fieldset-legend">Owner *</legend>
@@ -241,7 +248,12 @@
 			<h3 class="text-lg font-bold mb-3">Administer Vaccine</h3>
 			<p class="text-sm text-base-content/60 mb-3">Vaccine: <strong>{admin_target.name}</strong></p>
 			<form method="POST" action="?/mark_administered" use:enhance={() => {
-				return async ({ update }) => { await update(); show_admin_modal = false; admin_target = null; };
+				return async ({ result, update }) => {
+					if (result.type === 'success') toast.success('Vaccine administered.');
+					if (result.type === 'failure') toast.error('Failed to record administration.');
+					await update({ reset: result.type === 'success' });
+					if (result.type === 'success') { show_admin_modal = false; admin_target = null; }
+				};
 			}}>
 				<input type="hidden" name="id" value={admin_target.id} />
 				<fieldset class="fieldset mb-4">

@@ -1,5 +1,7 @@
 <script lang="ts">
-	import Pagination from '$lib/components/features/pagination/Pagination.svelte';
+	import { toast } from '$lib/stores/toast';
+import Tooltip from '$lib/components/ui/Tooltip.svelte';
+import Pagination from '$lib/components/features/pagination/Pagination.svelte';
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
@@ -147,7 +149,12 @@
 				</button>
 			</div>
 			<form method="POST" action="?/create" use:enhance={() => {
-				return async ({ update }) => { await update(); show_modal = false; };
+				return async ({ result, update }) => {
+					if (result.type === 'success') toast.success('Appointment scheduled.');
+					if (result.type === 'failure') toast.error('Failed to schedule appointment.');
+					await update({ reset: result.type === 'success' });
+					if (result.type === 'success') { show_modal = false; }
+				};
 			}} class="flex flex-col gap-3">
 				<fieldset class="fieldset">
 					<legend class="fieldset-legend">Owner (Customer) *</legend>

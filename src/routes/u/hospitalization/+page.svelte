@@ -1,5 +1,7 @@
 <script lang="ts">
-	import Pagination from '$lib/components/features/pagination/Pagination.svelte';
+	import { toast } from '$lib/stores/toast';
+import Tooltip from '$lib/components/ui/Tooltip.svelte';
+import Pagination from '$lib/components/features/pagination/Pagination.svelte';
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { date } from '$lib/utils/helper';
@@ -162,7 +164,12 @@
 			</div>
 
 			<form method="POST" action="?/admit" use:enhance={() => {
-				return async ({ update }) => { await update(); show_admit_modal = false; };
+				return async ({ result, update }) => {
+					if (result.type === 'success') toast.success('Patient admitted.');
+					if (result.type === 'failure') toast.error('Failed to admit patient.');
+					await update({ reset: result.type === 'success' });
+					if (result.type === 'success') { show_admit_modal = false; }
+				};
 			}} class="grid grid-cols-2 gap-3 ev-fade-up">
 				<fieldset class="fieldset">
 					<legend class="fieldset-legend">Owner *</legend>
@@ -244,7 +251,12 @@
 		<div class="modal-box max-w-md">
 			<h3 class="text-lg font-bold mb-4">Progress Note — {active_record.animal_name}</h3>
 			<form method="POST" action="?/add_note" use:enhance={() => {
-				return async ({ update }) => { await update(); show_note_modal = false; active_record = null; };
+				return async ({ result, update }) => {
+					if (result.type === 'success') toast.success('Progress note saved.');
+					if (result.type === 'failure') toast.error('Failed to save note.');
+					await update({ reset: result.type === 'success' });
+					if (result.type === 'success') { show_note_modal = false; active_record = null; }
+				};
 			}} class="flex flex-col gap-3">
 				<input type="hidden" name="id" value={active_record.id} />
 				<fieldset class="fieldset">
@@ -285,7 +297,12 @@
 		<div class="modal-box max-w-md">
 			<h3 class="text-lg font-bold mb-4">Discharge — {active_record.animal_name}</h3>
 			<form method="POST" action="?/discharge" use:enhance={() => {
-				return async ({ update }) => { await update(); show_discharge_modal = false; active_record = null; };
+				return async ({ result, update }) => {
+					if (result.type === 'success') toast.success('Patient discharged.');
+					if (result.type === 'failure') toast.error('Failed to discharge patient.');
+					await update({ reset: result.type === 'success' });
+					if (result.type === 'success') { show_discharge_modal = false; active_record = null; }
+				};
 			}} class="flex flex-col gap-3">
 				<input type="hidden" name="id" value={active_record.id} />
 				<fieldset class="fieldset">

@@ -6,13 +6,21 @@
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { CirclePlus, TriangleAlert, X, PackagePlus, Archive, Search, Package } from '@lucide/svelte';
+	import Tooltip from '$lib/components/ui/Tooltip.svelte';
+	import { toast } from '$lib/stores/toast';
 	import { resolve } from '$app/paths';
 	import { date } from '$lib/utils/helper';
 	import { formatPHP } from '$lib/constants';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
-	const { form: sf, errors, constraints, enhance: sfEnhance, message } = superForm(data.form, { delayMs: 300 });
+	const { form: sf, errors, constraints, enhance: sfEnhance, message } = superForm(data.form, {
+		delayMs: 300,
+		onUpdated({ form }) {
+			if (form.message?.type === 'success') toast.success('Item added to inventory.');
+			if (form.message?.type === 'error')   toast.error(form.message.text ?? 'Failed to add item.');
+		}
+	});
 
 	let show_add_modal    = $state(false);
 	let show_restock_modal = $state(false);
@@ -313,7 +321,12 @@
 			<p class="text-sm text-base-content/70 mb-1 font-semibold">{restock_item.name}</p>
 			<p class="text-xs text-base-content/40 mb-4">Current stock: <strong class="text-base-content">{restock_item.current_qty}</strong></p>
 			<form method="POST" action="?/restock" use:enhance={() => {
-				return async ({ update }) => { await update(); show_restock_modal = false; restock_item = null; };
+				return async ({ result, update }) => {
+					if (result.type === 'success') toast.success('Item restocked successfully.');
+					if (result.type === 'failure') toast.error('Failed to restock item.');
+					await update({ reset: result.type === 'success' });
+					if (result.type === 'success') { show_restock_modal = false; restock_item = null; }
+				};
 			}}>
 				<input type="hidden" name="id" value={restock_item.id} />
 				<fieldset class="fieldset mb-4">
