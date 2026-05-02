@@ -1,43 +1,55 @@
 import { Schema } from 'mongoose';
-import connectDB from '../db/easyvet_dbconn';
+import { v4 } from 'uuid';
+import db from '../db/easyvet_dbconn';
 
-let db = connectDB;
+const _db = await db.connect();
 
-export const sex_options = {
-	MALE: 1,
-	FEMALE: 2,
-	DID_NOT_INDICATE: 0
-} as const;
+const CustomersSchema = new Schema(
 
-const CustomersSchema = new Schema({
-	// customer information
-	firstname: { type: Schema.Types.String, required: true, trim: true },
-	middlename: { type: Schema.Types.String, required: false, trim: true },
-	lastname: { type: Schema.Types.String, required: true, trim: true },
-	birthdate: { type: Schema.Types.Date, required: false },
-	sex: {
-		type: Schema.Types.Number,
-		required: false,
-		enum: Object.values(sex_options),
-		default: 0
+	{
+		// metadata
+		public_id: {
+			type: String,
+			required: true,
+			default: v4,
+			immutable: true,
+			unique: true,
+		},
+		archived: { type: Boolean, required: true, default: false },
+		// temporary created_by field for dev
+		created_by: { type: String, default: 'dev' },
+		// created_by: { type: Schema.Types.ObjectId, ref: 'users' },
+
+		// customer information
+		firstname: { type: String, required: true, trim: true },
+		middlename: { type: String, required: false, trim: true },
+		lastname: { type: String, required: true, trim: true },
+		birthdate: { type: Date, required: false },
+		sex: {
+			type: String,
+			required: false,
+			enum: ['male', 'female']
+		},
+
+		// customer address
+		address_province: { type: String, required: true, trim: true },
+		address_city: { type: String, required: true, trim: true },
+		address_barangay: { type: String, required: false, trim: true },
+		address_line: { type: String, required: false, trim: true },
+		address_house_number: { type: Number, required: false, trim: true },
+
+		// customer contact info
+		contact_number: { type: String, required: false, trim: true },
+		email: { type: String, required: false, trim: true },
 	},
+	{
+		// model options
+		timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
+		collection: 'customers',
+		versionKey: false
+	}
+);
 
-	// customer address
-	address_province: { type: Schema.Types.String, required: true, trim: true },
-	address_city: { type: Schema.Types.String, required: true, trim: true },
-	address_barangay: { type: Schema.Types.String, required: false, trim: true },
-	address_line: { type: Schema.Types.String, required: false, trim: true },
-	address_house_number: { type: Schema.Types.Number, required: false, trim: true },
-
-	// customer contact info
-	contact_number: { type: Schema.Types.String, required: false, trim: true },
-	email: { type: Schema.Types.String, required: false, trim: true },
-
-	// others
-	archived: { type: Schema.Types.Boolean, required: true, default: false },
-	created_by: { type: Schema.Types.ObjectId, ref: 'users' }
-});
-
-const CustomersModel = db.models.customers || db.model('customers', CustomersSchema);
+const CustomersModel = _db.models.customers || _db.model('customers', CustomersSchema);
 
 export default CustomersModel;

@@ -1,16 +1,26 @@
 import { MONGO_URL, NODE_ENV } from '$env/static/private';
-import mongoose, { type ConnectOptions } from 'mongoose';
+import type { ConnectOptions } from 'mongoose';
+import mongoose from 'mongoose';
 
-export async function connectDB() {
-	console.log('~~~ connection to easyvet database ~~~');
-	const options = {
-		dbName: 'easyvet',
-		autoIndex: NODE_ENV !== 'production',
-		bufferCommands: false,
-		maxPoolSize: 100
-	};
+export const options: ConnectOptions = {
+	dbName: 'easyvet',
+	autoIndex: NODE_ENV !== "production",
+	bufferCommands: false,
+	maxPoolSize: 100,
+} as ConnectOptions;
 
-	return mongoose.createConnection(MONGO_URL, options as ConnectOptions);
-}
+export const db = {
+	connect: async () => {
+		if (mongoose.connection.readyState >= 1) {
+			console.log('Connection already established');
+			return mongoose.connection;
+		}
 
-export default await connectDB();
+		await mongoose.connect(MONGO_URL, options);
+		console.log(`MongoDB connected: ${mongoose.connection.host}`);
+
+		return mongoose.connection;
+	},
+};
+
+export default await db;

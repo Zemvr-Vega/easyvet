@@ -41,20 +41,21 @@ namespace Customer {
 
 		birthdate: z
 			.date('Birthdate must be a valid date.')
-			.refine(
-				(date) => {
+			.superRefine((date, ctx) => {
+				if (date) {
 					const age = new Date().getFullYear() - date.getFullYear();
-					return age >= 3;
-				},
-				{ message: 'Customer must be at least 3 years old.' }
-			)
-			.refine(
-				(date) => {
-					const age = new Date().getFullYear() - date.getFullYear();
-					return age <= 120;
-				},
-				{ message: 'Customer cannot be older than 120 years.' }
-			)
+
+					if (age < 3 || age > 120) {
+						ctx.addIssue({
+							code: 'custom',
+							message: age < 3
+								? 'Customer must be at least 3 years old.'
+								: 'Customer cannot be older than 120 years.'
+						});
+					}
+				}
+
+			})
 			.optional(),
 
 		// Customer address information

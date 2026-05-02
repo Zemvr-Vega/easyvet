@@ -2,12 +2,12 @@
 	import { TriangleAlert, Info as InfoIcon, Check } from '@lucide/svelte';
 	import type { Component, Snippet } from 'svelte';
 
-	type ErrorProps = {
+	type MessageProps = {
 		children?: Snippet;
 		message?: string | string[];
 		type?: 'error' | 'info' | 'success';
 	};
-	const { children, message, type = 'error' }: ErrorProps = $props();
+	const { children, message, type = 'error' }: MessageProps = $props();
 </script>
 
 {#if children}

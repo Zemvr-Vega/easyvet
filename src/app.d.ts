@@ -27,7 +27,7 @@ declare global {
 		namespace Superforms {
 			type Message = {
 				type: 'error' | 'success' | 'action';
-				text: string;
+				message: string;
 				data?: unknown;
 			};
 		}
@@ -41,4 +41,4 @@ declare global {
 	}
 }
 
-export {};
+export { };

@@ -21,5 +21,8 @@ export const actions: Actions = {
 				{ status: 400 }
 			);
 		}
+
+		const { data } = form;
+		console.log(data);
 	}
 };
