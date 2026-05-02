@@ -1,120 +1,142 @@
 <script lang="ts">
 	import Pagination from '$lib/components/features/pagination/Pagination.svelte';
-	import { Archive, CirclePlus, Pencil, SquareArrowOutUpRight } from '@lucide/svelte';
+	import { Archive, CirclePlus, Pencil, Search, SquareArrowOutUpRight, Users } from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 	import { slide } from 'svelte/transition';
+	import { goto } from '$app/navigation';
+	import type { PageData } from './$types';
 
-	let table_selected_row: number = $state<number>(0);
+	let { data }: { data: PageData } = $props();
 
-	const selectRow = (i: number) => {
-		if (table_selected_row == i) {
-			table_selected_row = 0;
-		} else {
-			table_selected_row = i;
-		}
-	};
+	let selected_row = $state('');
+	let search_input = $state(data.search);
+
+	function doSearch() {
+		const p = new URLSearchParams();
+		if (search_input) p.set('q', search_input);
+		p.set('page', '1');
+		p.set('size', String(data.size));
+		goto(`/u/customers?${p}`);
+	}
+
+	function fullAddress(c: (typeof data.customers)[0]) {
+		return [c.address_barangay, c.address_city, c.address_province].filter(Boolean).join(', ');
+	}
 </script>
 
-<header class=" flex h-fit max-h-10 min-h-8 flex-row justify-between gap-8 overflow-hidden">
-	<button
-		class="input input-sm w-full max-w-48 cursor-pointer input-ghost bg-base-200 ring-0 ring-transparent hover:bg-base-300 focus:outline-none"
-	>
-		<span class="grow text-left">Search...</span>
-		<div>
-			<kbd class="kbd kbd-xs">Ctrl+K</kbd>
-		</div>
-	</button>
+<svelte:head><title>EasyVet — Customers</title></svelte:head>
 
-	<div>
-		<a
-			class="btn flex flex-row items-center pr-3.5 text-xs btn-sm btn-primary"
-			href={resolve('/u/customers/new')}
-		>
-			<CirclePlus class="size-3.5" /> Add
+<div class="ev-page">
+
+	<!-- Header -->
+	<div class="flex items-center justify-between ev-fade-up">
+		<div>
+			<h1 class="text-base font-bold text-base-content">Customers</h1>
+			<p class="text-xs text-base-content/40 mt-0.5">{data.total} registered clients</p>
+		</div>
+		<a href={resolve('/u/customers/new')} class="btn btn-sm btn-primary gap-1.5 shadow-sm">
+			<CirclePlus class="size-3.5" strokeWidth={2.5} /> Add Customer
 		</a>
 	</div>
-</header>
 
-<main class="min-h-0 grow rounded-xl bg-base-100 p-4">
-	<div class="h-full min-h-full overflow-y-auto">
-		<table class="table-pin-rows table">
-			<thead class="z-20 text-xs">
-				<tr class="z-20">
-					<th class="w-0 p-0"></th>
-					<th>Name</th>
-					<th>Contact number</th>
-					<th>Address</th>
-					<th>Total Pets</th>
-				</tr>
-			</thead>
+	<!-- Search bar -->
+	<form onsubmit={(e) => { e.preventDefault(); doSearch(); }} class="flex items-center gap-2 ev-fade-up ev-d1">
+		<div class="ev-search-wrap flex-1 max-w-sm">
+			<Search />
+			<input
+				type="text"
+				class="ev-search"
+				placeholder="Search by name, email or contact..."
+				bind:value={search_input}
+			/>
+		</div>
+		<button type="submit" class="btn btn-sm btn-ghost text-xs">Search</button>
+		{#if data.search}
+			<a href="/u/customers" class="btn btn-sm btn-ghost text-xs text-base-content/40">Clear</a>
+		{/if}
+	</form>
 
-			<tbody class="z-10 text-xs">
-				{#each Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]) as i, index (index)}
-					<tr
-						class={[
-							'relative z-10 cursor-pointer hover:bg-base-300',
-							table_selected_row === i && 'bg-base-300'
-						]}
-						onclick={() => selectRow(i)}
-					>
-						{#key table_selected_row}
-							<td
-								class={[
-									'absolute z-10 flex h-full w-0 flex-row items-center bg-neutral/70 p-0 backdrop-blur-[2px]',
-									table_selected_row === i && 'w-full overflow-hidden px-4'
-								]}
-								in:slide={{ duration: 500, axis: 'x' }}
-								out:slide={{ delay: 200, axis: 'x' }}
-							>
-								<div
-									class={[
-										'flex w-fit min-w-0 grow flex-row gap-1 overflow-hidden',
-										table_selected_row == i ? 'block' : 'hidden'
-									]}
-									in:slide={{ axis: 'x' }}
-									out:slide={{ axis: 'x' }}
-								>
-									<a
-										href={resolve('/u/customers/1')}
-										class="btn items-center pr-2.5 btn-soft btn-xs btn-primary"
-										onclick={(e) => {
-											e.stopImmediatePropagation();
-										}}
-									>
-										<SquareArrowOutUpRight class="size-3" />View
-									</a>
-									<a
-										href={resolve('/')}
-										class="btn items-center pr-2.5 btn-soft btn-xs btn-accent"
-										onclick={(e) => {
-											e.stopImmediatePropagation();
-										}}
-									>
-										<Pencil class="size-3" />Edit
-									</a>
-									<button
-										class="btn items-center pr-2.5 btn-soft btn-xs btn-error"
-										type="button"
-										onclick={(e) => {
-											e.stopImmediatePropagation();
-										}}
-									>
-										<Archive class="size-3" />Archive
-									</button>
-								</div>
-							</td>
-						{/key}
-						<td>Juan Dela Cruz</td>
-						<td>09123456789</td>
-						<td>P5 Castillo Village, Mangagoy, Bislig City</td>
-						<td>6</td>
+	<!-- Table -->
+	<div class="ev-panel min-h-0 flex-1 flex flex-col overflow-hidden ev-fade-up ev-d2">
+		<div class="min-h-0 flex-1 overflow-y-auto">
+			<table class="ev-table">
+				<thead>
+					<tr>
+						<th class="w-0 p-0"></th>
+						<th>Name</th>
+						<th>Contact</th>
+						<th>Address</th>
+						<th>Pets</th>
 					</tr>
-				{/each}
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					{#each data.customers as customer (customer._id)}
+						<tr
+							class="relative cursor-pointer {selected_row === customer._id ? 'bg-base-200/60' : ''}"
+							onclick={() => selected_row = selected_row === customer._id ? '' : customer._id}
+						>
+							<!-- Slide-in action bar -->
+							{#key selected_row}
+								<td
+									class="absolute inset-y-0 left-0 z-10 flex items-center
+										{selected_row === customer._id ? 'w-full px-4 bg-neutral/80 backdrop-blur-sm' : 'w-0 p-0'}"
+									in:slide={{ duration: 280, axis: 'x' }}
+									out:slide={{ duration: 200, delay: 80, axis: 'x' }}
+								>
+									{#if selected_row === customer._id}
+										<div class="flex gap-1.5" in:slide={{ axis: 'x', duration: 200 }}>
+											<a
+												href={resolve(`/u/customers/${customer._id}`)}
+												class="btn btn-xs btn-soft btn-primary gap-1"
+												onclick={(e) => e.stopImmediatePropagation()}
+											>
+												<SquareArrowOutUpRight class="size-3" /> View
+											</a>
+											<a
+												href={resolve(`/u/customers/${customer._id}/edit`)}
+												class="btn btn-xs btn-soft btn-accent gap-1"
+												onclick={(e) => e.stopImmediatePropagation()}
+											>
+												<Pencil class="size-3" /> Edit
+											</a>
+											<form method="POST" action="?/archive" onclick={(e) => e.stopImmediatePropagation()}>
+												<input type="hidden" name="id" value={customer._id} />
+												<button
+													class="btn btn-xs btn-soft btn-error gap-1"
+													type="submit"
+													onclick={(e) => { e.stopImmediatePropagation(); if (!confirm('Archive this customer?')) e.preventDefault(); }}
+												>
+													<Archive class="size-3" /> Archive
+												</button>
+											</form>
+										</div>
+									{/if}
+								</td>
+							{/key}
+							<td class="font-semibold text-base-content">
+								{customer.firstname} {customer.lastname}
+							</td>
+							<td class="text-base-content/60">{customer.contact_number || '—'}</td>
+							<td class="text-base-content/60 max-w-48 truncate">{fullAddress(customer) || '—'}</td>
+							<td>
+								<span class="badge badge-ghost badge-sm">{customer.pet_count}</span>
+							</td>
+						</tr>
+					{:else}
+						<tr><td colspan="5">
+							<div class="ev-empty">
+								<Users class="size-8" />
+								<p class="text-sm font-medium">No customers found</p>
+								{#if data.search}<p class="text-xs">Try a different search term</p>{/if}
+							</div>
+						</td></tr>
+					{/each}
+				</tbody>
+			</table>
+		</div>
 	</div>
-</main>
 
-<footer>
-	<Pagination total={0} />
-</footer>
+	<div class="ev-fade-up ev-d3">
+		<Pagination total={data.total} />
+	</div>
+</div>

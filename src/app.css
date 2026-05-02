@@ -5,27 +5,553 @@
 
 @plugin "daisyui" {
 	themes:
-		winter --default,
-		winter;
+		easyvet-light --default,
+		easyvet-dark;
 	exclude: rootscrollgutter;
 }
 
-* {
-	font-family: 'DM Sans', sans-serif;
+/* ─── Custom Light Theme ─────────────────────────────────────────── */
+@plugin "daisyui/theme" {
+	name: "easyvet-light";
+	default: true;
+	color-scheme: light;
+	--color-base-100: oklch(100% 0 0);
+	--color-base-200: oklch(97% 0.003 264);
+	--color-base-300: oklch(92% 0.006 264);
+	--color-base-content: oklch(22% 0.02 264);
+	--color-primary: oklch(56% 0.22 255);
+	--color-primary-content: oklch(100% 0 0);
+	--color-secondary: oklch(62% 0.18 320);
+	--color-secondary-content: oklch(100% 0 0);
+	--color-accent: oklch(68% 0.2 160);
+	--color-accent-content: oklch(100% 0 0);
+	--color-neutral: oklch(32% 0.02 264);
+	--color-neutral-content: oklch(95% 0.005 264);
+	--color-info: oklch(65% 0.18 232);
+	--color-info-content: oklch(100% 0 0);
+	--color-success: oklch(62% 0.19 150);
+	--color-success-content: oklch(100% 0 0);
+	--color-warning: oklch(75% 0.18 75);
+	--color-warning-content: oklch(20% 0.05 75);
+	--color-error: oklch(60% 0.22 25);
+	--color-error-content: oklch(100% 0 0);
+	--radius-btn: 0.5rem;
+	--radius-box: 0.75rem;
+	--radius-badge: 999px;
 }
 
-.title-font {
-	font-family: 'DM Serif Display', serif;
+/* ─── Custom Dark Theme ──────────────────────────────────────────── */
+@plugin "daisyui/theme" {
+	name: "easyvet-dark";
+	color-scheme: dark;
+	--color-base-100: oklch(16% 0.015 264);
+	--color-base-200: oklch(12% 0.012 264);
+	--color-base-300: oklch(21% 0.018 264);
+	--color-base-content: oklch(92% 0.008 264);
+	--color-primary: oklch(62% 0.22 255);
+	--color-primary-content: oklch(100% 0 0);
+	--color-secondary: oklch(65% 0.18 320);
+	--color-secondary-content: oklch(100% 0 0);
+	--color-accent: oklch(68% 0.2 160);
+	--color-accent-content: oklch(100% 0 0);
+	--color-neutral: oklch(28% 0.02 264);
+	--color-neutral-content: oklch(90% 0.008 264);
+	--color-info: oklch(65% 0.18 232);
+	--color-info-content: oklch(100% 0 0);
+	--color-success: oklch(62% 0.19 150);
+	--color-success-content: oklch(100% 0 0);
+	--color-warning: oklch(75% 0.18 75);
+	--color-warning-content: oklch(20% 0.05 75);
+	--color-error: oklch(62% 0.22 25);
+	--color-error-content: oklch(100% 0 0);
+	--radius-btn: 0.5rem;
+	--radius-box: 0.75rem;
+	--radius-badge: 999px;
 }
 
-.dropzone_dragover {
-	@apply border-primary bg-primary/5;
+/* ─── Typography ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+	font-family: 'Inter', system-ui, sans-serif;
+	font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	transition: background-color 0.25s ease, color 0.25s ease;
 }
 
-input:focus {
-	--tw-ring-color: transparent;
+h1, h2, h3, h4, .font-display {
+	font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
-.divider-thin::after {
-	height: calc(0.07rem) !important;
+/* ─── Scrollbar ──────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+	background: color-mix(in oklch, var(--color-base-content) 15%, transparent);
+	border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+	background: color-mix(in oklch, var(--color-base-content) 28%, transparent);
+}
+
+/* ─── Focus ──────────────────────────────────────────────────────── */
+input:focus, select:focus, textarea:focus { --tw-ring-color: transparent; outline: none; }
+
+/* ─── Keyframes ──────────────────────────────────────────────────── */
+@keyframes ev-fade-up {
+	from { opacity: 0; transform: translateY(10px); }
+	to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes ev-fade-in {
+	from { opacity: 0; }
+	to   { opacity: 1; }
+}
+@keyframes ev-scale-in {
+	from { opacity: 0; transform: scale(0.96); }
+	to   { opacity: 1; transform: scale(1);    }
+}
+@keyframes ev-slide-right {
+	from { opacity: 0; transform: translateX(-12px); }
+	to   { opacity: 1; transform: translateX(0);     }
+}
+@keyframes ev-shimmer {
+	from { background-position: -200% 0; }
+	to   { background-position: 200% 0;  }
+}
+
+.ev-fade-up     { animation: ev-fade-up    0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.ev-fade-in     { animation: ev-fade-in    0.2s ease both; }
+.ev-scale-in    { animation: ev-scale-in   0.22s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.ev-slide-right { animation: ev-slide-right 0.25s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+.ev-d1  { animation-delay: 0.04s; }
+.ev-d2  { animation-delay: 0.08s; }
+.ev-d3  { animation-delay: 0.12s; }
+.ev-d4  { animation-delay: 0.16s; }
+.ev-d5  { animation-delay: 0.20s; }
+.ev-d6  { animation-delay: 0.24s; }
+
+/* ─── Modal ──────────────────────────────────────────────────────── */
+.modal-box { animation: ev-scale-in 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+/* ─── Sidebar ────────────────────────────────────────────────────── */
+.ev-sidebar {
+	width: 220px;
+	min-width: 220px;
+	height: 100dvh;
+	display: flex;
+	flex-direction: column;
+	background: var(--color-base-100);
+	border-right: 1px solid color-mix(in oklch, var(--color-base-content) 7%, transparent);
+	transition: background 0.25s, border-color 0.25s;
+	position: relative;
+	z-index: 10;
+}
+
+.ev-sidebar-logo {
+	display: flex;
+	align-items: center;
+	gap: 0.625rem;
+	padding: 1.125rem 1rem 0.875rem;
+	border-bottom: 1px solid color-mix(in oklch, var(--color-base-content) 6%, transparent);
+}
+
+.ev-sidebar-logo-mark {
+	width: 2rem;
+	height: 2rem;
+	border-radius: 0.5rem;
+	background: var(--color-primary);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--color-primary-content);
+	font-weight: 800;
+	font-size: 0.9rem;
+	flex-shrink: 0;
+	box-shadow: 0 2px 8px color-mix(in oklch, var(--color-primary) 35%, transparent);
+}
+
+.ev-sidebar-nav {
+	flex: 1;
+	overflow-y: auto;
+	padding: 0.625rem 0.625rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.125rem;
+}
+
+.ev-nav-section-label {
+	font-size: 0.62rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: color-mix(in oklch, var(--color-base-content) 35%, transparent);
+	padding: 0.625rem 0.75rem 0.25rem;
+	margin-top: 0.375rem;
+}
+
+.ev-nav-link {
+	display: flex;
+	align-items: center;
+	gap: 0.625rem;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.5rem;
+	font-size: 0.75rem;
+	font-weight: 500;
+	color: color-mix(in oklch, var(--color-base-content) 55%, transparent);
+	transition: background-color 0.15s, color 0.15s;
+	position: relative;
+	cursor: pointer;
+	text-decoration: none;
+	white-space: nowrap;
+}
+.ev-nav-link:hover {
+	background: color-mix(in oklch, var(--color-base-content) 6%, transparent);
+	color: var(--color-base-content);
+}
+.ev-nav-link.ev-active {
+	background: color-mix(in oklch, var(--color-primary) 12%, transparent);
+	color: var(--color-primary);
+	font-weight: 600;
+}
+.ev-nav-link.ev-active::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 22%;
+	bottom: 22%;
+	width: 3px;
+	background: var(--color-primary);
+	border-radius: 0 999px 999px 0;
+}
+.ev-nav-link-icon {
+	width: 1rem;
+	height: 1rem;
+	flex-shrink: 0;
+	opacity: 0.7;
+}
+.ev-nav-link.ev-active .ev-nav-link-icon { opacity: 1; }
+
+/* ─── Topbar ─────────────────────────────────────────────────────── */
+.ev-topbar {
+	height: 52px;
+	min-height: 52px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 1.25rem;
+	background: var(--color-base-100);
+	border-bottom: 1px solid color-mix(in oklch, var(--color-base-content) 6%, transparent);
+	transition: background 0.25s;
+}
+
+/* ─── Page Shell ─────────────────────────────────────────────────── */
+.ev-page {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	height: 100%;
+	min-height: 0;
+	padding: 1.25rem;
+	overflow: hidden;
+}
+
+/* ─── Table ──────────────────────────────────────────────────────── */
+.ev-table { width: 100%; border-collapse: collapse; }
+.ev-table th {
+	padding: 0.625rem 0.875rem;
+	font-size: 0.65rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: color-mix(in oklch, var(--color-base-content) 38%, transparent);
+	border-bottom: 1px solid color-mix(in oklch, var(--color-base-content) 8%, transparent);
+	text-align: left;
+	white-space: nowrap;
+	position: sticky;
+	top: 0;
+	background: var(--color-base-100);
+	z-index: 1;
+}
+.ev-table td {
+	padding: 0.75rem 0.875rem;
+	font-size: 0.8rem;
+	border-bottom: 1px solid color-mix(in oklch, var(--color-base-content) 5%, transparent);
+	vertical-align: middle;
+}
+.ev-table tr:last-child td { border-bottom: none; }
+.ev-table tbody tr {
+	transition: background-color 0.1s;
+}
+.ev-table tbody tr:hover {
+	background: color-mix(in oklch, var(--color-base-content) 4%, transparent);
+}
+
+/* ─── Stat Card ──────────────────────────────────────────────────── */
+.ev-stat-card {
+	background: var(--color-base-100);
+	border: 1px solid color-mix(in oklch, var(--color-base-content) 7%, transparent);
+	border-radius: 0.875rem;
+	padding: 1.125rem 1.25rem;
+	transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
+	cursor: pointer;
+	text-decoration: none;
+	display: block;
+}
+.ev-stat-card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 24px color-mix(in oklch, var(--color-base-content) 8%, transparent);
+	border-color: color-mix(in oklch, var(--color-primary) 25%, transparent);
+}
+
+/* ─── Panel ──────────────────────────────────────────────────────── */
+.ev-panel {
+	background: var(--color-base-100);
+	border: 1px solid color-mix(in oklch, var(--color-base-content) 7%, transparent);
+	border-radius: 0.875rem;
+	transition: background 0.25s, border-color 0.25s;
+}
+
+/* ─── Search ─────────────────────────────────────────────────────── */
+.ev-search-wrap { position: relative; }
+.ev-search-wrap svg {
+	position: absolute;
+	left: 0.625rem;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 0.875rem;
+	height: 0.875rem;
+	color: color-mix(in oklch, var(--color-base-content) 35%, transparent);
+	pointer-events: none;
+}
+.ev-search {
+	background: color-mix(in oklch, var(--color-base-content) 5%, transparent);
+	border: 1px solid color-mix(in oklch, var(--color-base-content) 8%, transparent);
+	border-radius: 0.5rem;
+	padding: 0.4rem 0.75rem 0.4rem 2.125rem;
+	font-size: 0.8rem;
+	color: var(--color-base-content);
+	transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+	width: 100%;
+	min-width: 180px;
+}
+.ev-search:focus {
+	background: var(--color-base-100);
+	border-color: color-mix(in oklch, var(--color-primary) 45%, transparent);
+	box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 12%, transparent);
+}
+.ev-search::placeholder { color: color-mix(in oklch, var(--color-base-content) 30%, transparent); }
+
+/* ─── Theme Toggle ───────────────────────────────────────────────── */
+.ev-theme-toggle {
+	width: 2rem;
+	height: 2rem;
+	border-radius: 0.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	border: 1px solid color-mix(in oklch, var(--color-base-content) 10%, transparent);
+	background: transparent;
+	color: color-mix(in oklch, var(--color-base-content) 55%, transparent);
+	transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.ev-theme-toggle:hover {
+	background: color-mix(in oklch, var(--color-base-content) 7%, transparent);
+	color: var(--color-base-content);
+}
+
+/* ─── Badge ──────────────────────────────────────────────────────── */
+.badge { font-weight: 500; letter-spacing: 0.01em; }
+
+/* ─── Button ─────────────────────────────────────────────────────── */
+.btn { font-weight: 600; letter-spacing: 0.01em; transition: all 0.15s; }
+.btn:active:not(:disabled) { transform: scale(0.96); }
+
+/* ─── Fieldset legend ────────────────────────────────────────────── */
+.fieldset-legend {
+	font-size: 0.68rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: color-mix(in oklch, var(--color-base-content) 45%, transparent);
+}
+
+/* ─── Empty state ────────────────────────────────────────────────── */
+.ev-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 3rem 1rem;
+	color: color-mix(in oklch, var(--color-base-content) 30%, transparent);
+	text-align: center;
+	gap: 0.5rem;
+}
+.ev-empty svg { opacity: 0.25; }
+
+/* ─── Divider ────────────────────────────────────────────────────── */
+.divider-thin::after, .divider-thin::before {
+	height: 1px !important;
+	opacity: 0.1;
+}
+
+/* ─── Shimmer skeleton ───────────────────────────────────────────── */
+.ev-skeleton {
+	background: linear-gradient(
+		90deg,
+		color-mix(in oklch, var(--color-base-content) 6%, transparent) 25%,
+		color-mix(in oklch, var(--color-base-content) 10%, transparent) 50%,
+		color-mix(in oklch, var(--color-base-content) 6%, transparent) 75%
+	);
+	background-size: 200% 100%;
+	animation: ev-shimmer 1.4s infinite;
+	border-radius: 0.375rem;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+	.ev-sidebar { width: 60px; min-width: 60px; }
+	.ev-sidebar-logo-text { display: none; }
+	.ev-nav-link span { display: none; }
+	.ev-nav-section-label { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FORM ELEMENTS — consistent across both light and dark themes.
+   DaisyUI's .input/.select/.textarea default to base-100 bg which
+   is white in light mode, making them invisible against white modals.
+   We override to use base-200 as the resting bg and base-100 on focus.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Shared token for all form fields */
+:root {
+	--ev-field-bg:          color-mix(in oklch, var(--color-base-content)  6%, var(--color-base-200));
+	--ev-field-bg-focus:    var(--color-base-100);
+	--ev-field-border:      color-mix(in oklch, var(--color-base-content) 14%, transparent);
+	--ev-field-border-focus:color-mix(in oklch, var(--color-primary)       55%, transparent);
+	--ev-field-ring:        color-mix(in oklch, var(--color-primary)       14%, transparent);
+	--ev-field-placeholder: color-mix(in oklch, var(--color-base-content)  30%, transparent);
+	--ev-field-text:        var(--color-base-content);
+}
+
+/* ── .input (text / number / date etc.) ─────────────────────────── */
+.input {
+	background-color: var(--ev-field-bg) !important;
+	border-color:     var(--ev-field-border) !important;
+	color:            var(--ev-field-text) !important;
+	transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.input:focus,
+.input:focus-within {
+	background-color: var(--ev-field-bg-focus) !important;
+	border-color:     var(--ev-field-border-focus) !important;
+	box-shadow:       0 0 0 3px var(--ev-field-ring) !important;
+	outline: none !important;
+}
+.input::placeholder { color: var(--ev-field-placeholder); }
+.input.border-error  { border-color: var(--color-error) !important; }
+
+/* ── .select ─────────────────────────────────────────────────────── */
+.select {
+	background-color: var(--ev-field-bg) !important;
+	border-color:     var(--ev-field-border) !important;
+	color:            var(--ev-field-text) !important;
+	transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.select:focus {
+	background-color: var(--ev-field-bg-focus) !important;
+	border-color:     var(--ev-field-border-focus) !important;
+	box-shadow:       0 0 0 3px var(--ev-field-ring) !important;
+	outline: none !important;
+}
+/* Keep option text readable on both OS themes */
+.select option {
+	background-color: var(--color-base-100);
+	color:            var(--color-base-content);
+}
+
+/* ── .textarea ───────────────────────────────────────────────────── */
+.textarea {
+	background-color: var(--ev-field-bg) !important;
+	border-color:     var(--ev-field-border) !important;
+	color:            var(--ev-field-text) !important;
+	transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+	resize: vertical;
+}
+.textarea:focus {
+	background-color: var(--ev-field-bg-focus) !important;
+	border-color:     var(--ev-field-border-focus) !important;
+	box-shadow:       0 0 0 3px var(--ev-field-ring) !important;
+	outline: none !important;
+}
+.textarea::placeholder { color: var(--ev-field-placeholder); }
+
+/* ── .checkbox / .radio ──────────────────────────────────────────── */
+.checkbox, .radio {
+	border-color: var(--ev-field-border) !important;
+	background-color: var(--ev-field-bg) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MODAL — always sits on base-100 with a proper backdrop.
+   modal-box should never be transparent or inherit white-page bg.
+   ═══════════════════════════════════════════════════════════════════ */
+.modal-box {
+	background-color: var(--color-base-100) !important;
+	border: 1px solid color-mix(in oklch, var(--color-base-content) 8%, transparent);
+	box-shadow: 0 25px 60px color-mix(in oklch, var(--color-base-content) 20%, transparent);
+	color: var(--color-base-content) !important;
+}
+/* Darken the backdrop slightly for better contrast */
+.modal::before,
+.modal-backdrop {
+	background-color: color-mix(in oklch, var(--color-neutral) 55%, transparent) !important;
+	backdrop-filter: blur(2px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   BUTTONS — remove white text bleed on ghost/soft variants.
+   ═══════════════════════════════════════════════════════════════════ */
+/* btn-ghost should use base-content, not white */
+.btn-ghost {
+	color: color-mix(in oklch, var(--color-base-content) 65%, transparent) !important;
+}
+.btn-ghost:hover {
+	background-color: color-mix(in oklch, var(--color-base-content) 8%, transparent) !important;
+	color: var(--color-base-content) !important;
+}
+
+/* btn-soft variants inherit their color but sometimes DaisyUI
+   forces white text on light tints — ensure readable text */
+.btn-soft.btn-primary { color: var(--color-primary) !important; }
+.btn-soft.btn-success { color: var(--color-success) !important; }
+.btn-soft.btn-error   { color: var(--color-error)   !important; }
+.btn-soft.btn-accent  { color: var(--color-accent)  !important; }
+.btn-soft.btn-warning { color: var(--color-warning) !important; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   BADGE — colored badges need readable text.
+   badge-success / badge-warning on light bg can clash with white text.
+   Use content vars so they always contrast properly.
+   ═══════════════════════════════════════════════════════════════════ */
+.badge-success { color: var(--color-success-content) !important; }
+.badge-warning { color: var(--color-warning-content) !important; }
+.badge-error   { color: var(--color-error-content)   !important; }
+.badge-info    { color: var(--color-info-content)    !important; }
+.badge-primary { color: var(--color-primary-content) !important; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   FIELDSET / LEGEND — DaisyUI fieldset bg must be transparent
+   so it doesn't create a white box inside a coloured modal.
+   ═══════════════════════════════════════════════════════════════════ */
+.fieldset {
+	background: transparent !important;
+	border: none !important;
+	padding: 0 !important;
+}
+.fieldset-legend {
+	background: transparent !important;
+	padding: 0 0 0.25rem 0 !important;
 }

@@ -1,25 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // See https://svelte.dev/docs/kit/types#app.d.ts
-// for information about these interfaces
-
-import type { EnforcementGroup } from '$lib/validation_schemas/EnforcementGroups.zod';
-import type { User } from '$lib/validation_schemas/Users.zod';
-import type { UserType } from '$lib/validation_schemas/UserTypes.zod';
 
 declare namespace NodeJS {
 	interface Global {
 		mongoose: {
-			conn: any; // Or use mongoose.Connection
-			promise: Promise<any>; // Or use Promise<mongoose.Mongoose>
+			conn: any;
+			promise: Promise<any>;
 		} | null;
 	}
 }
+
 declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			user?: User<EnforcementGroup, UserType>;
+			user?: Record<string, unknown>;
 		}
 		// interface PageData {}
 		// interface PageState {}
@@ -33,10 +29,6 @@ declare global {
 		}
 		interface PageData {
 			flash?: { type?: 'success' | 'error'; message: string };
-		}
-
-		namespace Dev {
-			type SvelteFetch = typeof fetch;
 		}
 	}
 }
