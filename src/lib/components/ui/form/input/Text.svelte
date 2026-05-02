@@ -15,7 +15,6 @@
 </script>
 
 <fieldset class="fieldset w-full gap-0.5">
-	<!-- label -->
 	<legend class="fieldset-legend p-0.5">
 		<span>{label}</span>
 		{#if required}
@@ -23,18 +22,16 @@
 		{/if}
 	</legend>
 
-	<!-- input -->
 	<input
 		type="text"
 		{placeholder}
 		{name}
-		class={['input', style, errors && errors.length && 'border-error']}
+		class={['input input-sm w-full', style, errors && errors.length ? 'border-error' : '']}
 		aria-invalid={errors ? true : undefined}
 		{...constraints}
 		bind:value
 	/>
 
-	<!-- children props such as errors and other info will be rendered here -->
 	{#if children}
 		{@render children()}
 	{/if}
