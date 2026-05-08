@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose';
-import connectDB from '../db/easyvet_dbconn';
+import { db as _db } from '../db/easyvet_dbconn';
 
-const db = connectDB;
+const db = await _db.connect();
 
 export const lab_test_types = [
 	'cbc', // Complete Blood Count

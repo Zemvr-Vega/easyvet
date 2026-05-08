@@ -2,9 +2,21 @@
 	import favicon from '$lib/assets/favicon.png';
 	import type { Component } from 'svelte';
 	import {
-		ChartNoAxesCombined, ClipboardClock, ClipboardPenLine,
-		FlaskConical, Hospital, LayoutDashboard, Package, PawPrint,
-		ShoppingBasket, Slice, Syringe, Users, Sun, Moon, Activity,
+		ChartNoAxesCombined,
+		ClipboardClock,
+		ClipboardPenLine,
+		FlaskConical,
+		Hospital,
+		LayoutDashboard,
+		Package,
+		PawPrint,
+		ShoppingBasket,
+		Slice,
+		Syringe,
+		Users,
+		Sun,
+		Moon,
+		Activity,
 		type IconProps
 	} from '@lucide/svelte';
 	import { page } from '$app/state';
@@ -21,26 +33,26 @@
 	};
 
 	const nav: NavItem[] = [
-		{ name: 'Dashboard',    Icon: LayoutDashboard, href: '/u/dashboard' },
-		{ name: 'Customers',    Icon: Users,            href: '/u/customers' },
-		{ name: 'Animals',      Icon: PawPrint,         href: '/u/animals' },
-		{ name: 'Appointments', Icon: ClipboardClock,   href: '/u/appointments' },
+		{ name: 'Dashboard', Icon: LayoutDashboard, href: '/u/dashboard' },
+		{ name: 'Customers', Icon: Users, href: '/u/customers' },
+		{ name: 'Animals', Icon: PawPrint, href: '/u/animals' },
+		{ name: 'Appointments', Icon: ClipboardClock, href: '/u/appointments' },
 		{
 			name: 'Services',
 			sub_items: [
-				{ name: 'Consultations',    Icon: ClipboardPenLine, href: '/u/consultations' },
-				{ name: 'Vaccinations',     Icon: Syringe,          href: '/u/vaccinations' },
-				{ name: 'Laboratory',       Icon: FlaskConical,     href: '/u/laboratory' },
-				{ name: 'Surgery',          Icon: Slice,            href: '/u/surgery' },
-				{ name: 'Hospitalization',  Icon: Hospital,         href: '/u/hospitalization' }
+				{ name: 'Consultations', Icon: ClipboardPenLine, href: '/u/consultations' },
+				{ name: 'Vaccinations', Icon: Syringe, href: '/u/vaccinations' },
+				{ name: 'Laboratory', Icon: FlaskConical, href: '/u/laboratory' },
+				{ name: 'Surgery', Icon: Slice, href: '/u/surgery' },
+				{ name: 'Hospitalization', Icon: Hospital, href: '/u/hospitalization' }
 			]
 		},
 		{
 			name: 'Sales',
 			sub_items: [
-				{ name: 'Billing',   Icon: ShoppingBasket,       href: '/u/billing' },
-				{ name: 'Inventory', Icon: Package,              href: '/u/inventory' },
-				{ name: 'Sales',     Icon: ChartNoAxesCombined,  href: '/u/sales' }
+				{ name: 'Billing', Icon: ShoppingBasket, href: '/u/billing' },
+				{ name: 'Inventory', Icon: Package, href: '/u/inventory' },
+				{ name: 'Sales', Icon: ChartNoAxesCombined, href: '/u/sales' }
 			]
 		}
 	];
@@ -69,24 +81,22 @@
 </svelte:head>
 
 <div class="flex h-dvh w-full overflow-hidden bg-base-200">
-
 	<!-- ── Sidebar ───────────────────────────────────────────────── -->
 	<aside class="ev-sidebar ev-fade-in">
-
 		<!-- Logo -->
 		<div class="ev-sidebar-logo">
 			<div class="ev-sidebar-logo-mark">
 				<Activity class="size-4" strokeWidth={2.5} />
 			</div>
 			<div class="ev-sidebar-logo-text">
-				<p class="text-sm font-bold leading-tight tracking-tight text-base-content">EasyVet</p>
-				<p class="text-[0.6rem] text-base-content/40 leading-tight">Vet Management</p>
+				<p class="text-sm leading-tight font-bold tracking-tight text-base-content">EasyVet</p>
+				<p class="text-[0.6rem] leading-tight text-base-content/40">Vet Management</p>
 			</div>
 		</div>
 
 		<!-- Nav -->
 		<nav class="ev-sidebar-nav">
-			{#each nav as item, i}
+			{#each nav as item, i (i)}
 				{#if !item.sub_items}
 					<a
 						href={resolve(item.href!)}
@@ -117,8 +127,11 @@
 		</nav>
 
 		<!-- Bottom: theme toggle -->
-		<div class="flex items-center justify-between px-4 py-3 border-t border-base-content/[0.07]">
-			<span class="text-[0.65rem] font-medium text-base-content/35 uppercase tracking-wider ev-sidebar-logo-text">Appearance</span>
+		<div class="flex items-center justify-between border-t border-base-content/[0.07] px-4 py-3">
+			<span
+				class="ev-sidebar-logo-text text-[0.65rem] font-medium tracking-wider text-base-content/35 uppercase"
+				>Appearance</span
+			>
 			<button
 				class="ev-theme-toggle"
 				onclick={() => theme.toggle()}
@@ -136,11 +149,10 @@
 
 	<!-- ── Main content area ─────────────────────────────────────── -->
 	<div class="flex min-w-0 flex-1 flex-col overflow-hidden">
-
 		<!-- Topbar -->
 		<header class="ev-topbar">
 			<div class="flex items-center gap-2">
-				<span class="text-xs font-semibold text-base-content/40 uppercase tracking-widest">
+				<span class="text-xs font-semibold tracking-widest text-base-content/40 uppercase">
 					{current_page()}
 				</span>
 			</div>
@@ -158,8 +170,14 @@
 					{/if}
 				</button>
 				<!-- User pill -->
-				<div class="flex items-center gap-2 rounded-lg border border-base-content/10 bg-base-200/60 px-2.5 py-1.5">
-					<div class="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[0.6rem] font-bold text-primary-content">V</div>
+				<div
+					class="flex items-center gap-2 rounded-lg border border-base-content/10 bg-base-200/60 px-2.5 py-1.5"
+				>
+					<div
+						class="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[0.6rem] font-bold text-primary-content"
+					>
+						V
+					</div>
 					<span class="text-xs font-medium text-base-content/70">Dr. Vet</span>
 				</div>
 			</div>

@@ -1,3 +1,5 @@
+import { goto } from '$app/navigation';
+import { page } from '$app/state';
 import mongoose from 'mongoose';
 
 export const months = [
@@ -292,3 +294,16 @@ export const parseSearchParams = (
 
 	return { skip, limit, search, archived };
 };
+
+export function gotoWithParams(params: { key: string; value: unknown }[]) {
+	const url = new URL(page.url); // clone current URL
+
+	// Set or update only this param
+	params.forEach((param) => {
+		url.searchParams.set(param.key, param.value as string);
+	});
+
+	// Navigate to updated URL
+	// eslint-disable-next-line svelte/no-navigation-without-resolve
+	goto(url.pathname + '?' + url.searchParams.toString());
+}

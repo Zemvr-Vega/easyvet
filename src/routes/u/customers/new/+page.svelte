@@ -2,7 +2,6 @@
 	import Input from '$lib/components/ui/form/input/Input';
 	import Message from '$lib/components/ui/form/message/Message.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
-	import { fly } from 'svelte/transition';
 
 	const { data } = $props();
 	const { form, errors, constraints, enhance } = superForm(data.form, { delayMs: 500 });
@@ -10,22 +9,17 @@
 
 <div class="h-full w-full">
 	<form
-		class="flex h-full w-full flex-col gap-4"
+		class="flex h-full w-full flex-col gap-4 p-4 pb-8"
 		action="?/new"
 		method="POST"
 		use:enhance
 		novalidate
 	>
-		<div>
-			<h1 class="text-xl font-bold">New Customer</h1>
-		</div>
-
 		<div class="flex flex-col items-center overflow-y-auto">
 			<div class="flex w-full max-w-2xl grow flex-col gap-6">
 				<!-- Personal Information Section -->
 				<section
-					class="card grid w-full grid-cols-4 gap-x-2 gap-y-4 bg-base-100 p-4 shadow-sm"
-					in:fly={{ y: 20, duration: 400, delay: 0 }}
+					class="ev-fade-up card grid w-full grid-cols-4 gap-x-2 gap-y-4 bg-base-100 p-4 shadow-sm"
 				>
 					<div class="col-span-full flex flex-col">
 						<span class="font-bold">Personal Details</span>
@@ -86,8 +80,8 @@
 
 				<!-- Address Information Section -->
 				<section
-					class="card grid w-full grid-cols-4 gap-x-2 gap-y-4 bg-base-100 p-4 shadow-sm"
-					in:fly={{ y: 20, duration: 400, delay: 100 }}
+					class="ev-fade-up card grid w-full grid-cols-4 gap-x-2 gap-y-4 bg-base-100 p-4 shadow-sm"
+					style="animation-delay: 100ms;"
 				>
 					<div class="col-span-full flex flex-col">
 						<span class="font-bold">Address</span>
@@ -161,8 +155,8 @@
 
 				<!-- Contact Information Section -->
 				<section
-					class="card grid w-full grid-cols-4 gap-x-2 gap-y-4 bg-base-100 p-4 shadow-sm"
-					in:fly={{ y: 20, duration: 400, delay: 200 }}
+					class="ev-fade-up card grid w-full grid-cols-4 gap-x-2 gap-y-4 bg-base-100 p-4 shadow-sm"
+					style="animation-delay: 200ms;"
 				>
 					<div class="col-span-full flex flex-col">
 						<span class="font-bold">Contact Information</span>

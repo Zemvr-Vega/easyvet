@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { page as url_page } from '$app/state';
-	import { updateQueryParam } from '$lib/utils/helper';
+	import { gotoWithParams } from '$lib/utils/helper';
 	import { ChevronLeft, ChevronRight } from '@lucide/svelte';
 
 	let { total } = $props();
@@ -44,7 +43,7 @@
 			class="btn join-item btn-soft btn-sm btn-primary"
 			class:btn-disabled={page == 1}
 			onclick={() =>
-				updateQueryParam([
+				gotoWithParams([
 					{ key: 'page', value: page - 1 },
 					{ key: 'size', value: size }
 				])}
@@ -56,7 +55,7 @@
 			class="select w-fit min-w-24 select-sm select-primary"
 			bind:value={page}
 			onchange={(e) =>
-				updateQueryParam([
+				gotoWithParams([
 					{ key: 'page', value: e.currentTarget.value },
 					{ key: 'size', value: size }
 				])}
@@ -70,7 +69,7 @@
 			class="btn join-item btn-soft btn-sm btn-primary"
 			class:btn-disabled={page == total_pages()}
 			onclick={() =>
-				updateQueryParam([
+				gotoWithParams([
 					{ key: 'page', value: page + 1 },
 					{ key: 'size', value: size }
 				])}
@@ -84,7 +83,7 @@
 			class="select w-fit min-w-16 select-sm select-primary"
 			bind:value={size}
 			onchange={(e) =>
-				updateQueryParam([
+				gotoWithParams([
 					{ key: 'page', value: 1 },
 					{ key: 'size', value: e.currentTarget.value }
 				])}
