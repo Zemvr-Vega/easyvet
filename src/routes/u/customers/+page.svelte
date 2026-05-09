@@ -12,6 +12,7 @@
 	import { slide } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import type { PageData } from './$types';
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
 
 	let { data }: { data: PageData } = $props();
 
@@ -115,11 +116,7 @@
 											>
 												<Pencil class="size-3" /> Edit
 											</a>
-											<form
-												method="POST"
-												action="?/archive"
-												onclick={(e) => e.stopImmediatePropagation()}
-											>
+											<form method="POST" action="?/archive">
 												<input type="hidden" name="id" value={customer._id} />
 												<button
 													class="btn gap-1 btn-soft btn-xs btn-error"

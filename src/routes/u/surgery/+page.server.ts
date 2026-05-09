@@ -2,6 +2,8 @@ import type { PageServerLoad, Actions } from './$types';
 import SurgeriesModel from '$lib/server/models/surgeries.model';
 import AnimalsModel from '$lib/server/models/animals.model';
 import CustomersModel from '$lib/server/models/customers.model';
+import { logActivity } from '$lib/server/activity-log';
+import { notify } from '$lib/server/email';
 import { fail } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ url }) => {

@@ -1,5 +1,7 @@
 <script lang="ts">
-	import Pagination from '$lib/components/features/pagination/Pagination.svelte';
+	import { toast } from '$lib/stores/toast';
+import Tooltip from '$lib/components/ui/Tooltip.svelte';
+import Pagination from '$lib/components/features/pagination/Pagination.svelte';
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
@@ -162,7 +164,14 @@
 				</button>
 			</div>
 
-			<form method="POST" action="?/create" use:enhance class="flex flex-col gap-5">
+			<form method="POST" action="?/create" use:enhance={() => {
+			return async ({ result, update }) => {
+				if (result.type === 'success') toast.success('Invoice created.');
+				if (result.type === 'failure') toast.error('Failed to create invoice.');
+				await update();
+				if (result.type === 'success') show_new_modal = false;
+			};
+		}} class="flex flex-col gap-5">
 				<!-- Patient selection -->
 				<div class="grid grid-cols-2 gap-3">
 					<fieldset class="fieldset">
@@ -313,7 +322,12 @@
 			<p class="text-sm mb-1">Invoice: <strong>{pay_invoice.number}</strong></p>
 			<p class="text-sm mb-4">Amount: <strong>{formatPHP(pay_invoice.total)}</strong></p>
 			<form method="POST" action="?/mark_paid" use:enhance={() => {
-				return async ({ update }) => { await update(); show_pay_modal = false; pay_invoice = null; };
+				return async ({ result, update }) => {
+					if (result.type === 'success') toast.success('Payment recorded. Invoice marked as paid.');
+					if (result.type === 'failure') toast.error('Failed to record payment.');
+					await update({ reset: result.type === 'success' });
+					if (result.type === 'success') { show_pay_modal = false; pay_invoice = null; }
+				};
 			}}>
 				<input type="hidden" name="id" value={pay_invoice.id} />
 				<fieldset class="fieldset mb-4">

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="easyvet-light">
+<html lang="en" data-theme="nord">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,15 +7,14 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
 		<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 		<title>EasyVet</title>
-		<!-- Apply persisted theme before first paint to avoid flash -->
 		<script>
 			(function () {
 				try {
 					var t = localStorage.getItem('ev-theme');
-					if (t === 'easyvet-dark' || t === 'easyvet-light') {
+					if (t === 'dark' || t === 'nord') {
 						document.documentElement.setAttribute('data-theme', t);
 					} else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-						document.documentElement.setAttribute('data-theme', 'easyvet-dark');
+						document.documentElement.setAttribute('data-theme', 'dark');
 					}
 				} catch (e) {}
 			})();
