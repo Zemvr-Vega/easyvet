@@ -1,11 +1,7 @@
-import { Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import { v4 } from 'uuid';
-import db from '../db/easyvet_dbconn';
-
-const _db = await db.connect();
 
 const CustomersSchema = new Schema(
-
 	{
 		// metadata
 		public_id: {
@@ -13,7 +9,7 @@ const CustomersSchema = new Schema(
 			required: true,
 			default: v4,
 			immutable: true,
-			unique: true,
+			unique: true
 		},
 		archived: { type: Boolean, required: true, default: false },
 		// temporary created_by field for dev
@@ -40,16 +36,16 @@ const CustomersSchema = new Schema(
 
 		// customer contact info
 		contact_number: { type: String, required: false, trim: true },
-		email: { type: String, required: false, trim: true },
+		email: { type: String, required: false, trim: true }
 	},
 	{
 		// model options
-		timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
+		timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
 		collection: 'customers',
 		versionKey: false
 	}
 );
 
-const CustomersModel = _db.models.customers || _db.model('customers', CustomersSchema);
+const CustomersModel = mongoose.models.customers || mongoose.model('customers', CustomersSchema);
 
 export default CustomersModel;

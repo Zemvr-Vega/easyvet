@@ -1,7 +1,4 @@
-import { Schema } from 'mongoose';
-import { db as _db } from '../db/easyvet_dbconn';
-
-const db = await _db.connect();
+import mongoose, { Schema } from 'mongoose';
 
 const InvoiceItemSchema = new Schema({
 	description: { type: Schema.Types.String, required: true },
@@ -49,5 +46,5 @@ const InvoicesSchema = new Schema(
 	{ timestamps: true }
 );
 
-const InvoicesModel = db.models.invoices || db.model('invoices', InvoicesSchema);
+const InvoicesModel = mongoose.models.invoices || mongoose.model('invoices', InvoicesSchema);
 export default InvoicesModel;

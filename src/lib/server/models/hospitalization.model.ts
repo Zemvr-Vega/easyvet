@@ -1,7 +1,4 @@
-import { Schema } from 'mongoose';
-import { db as _db } from '../db/easyvet_dbconn';
-
-const db = await _db.connect();
+import mongoose, { Schema } from 'mongoose';
 
 export const hospitalization_reasons = [
 	'post-surgery',
@@ -87,5 +84,5 @@ const HospitalizationSchema = new Schema(
 );
 
 const HospitalizationModel =
-	db.models.hospitalization || db.model('hospitalization', HospitalizationSchema);
+	mongoose.models.hospitalization || mongoose.model('hospitalization', HospitalizationSchema);
 export default HospitalizationModel;

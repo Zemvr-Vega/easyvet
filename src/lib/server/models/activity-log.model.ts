@@ -1,46 +1,66 @@
-import { Schema } from 'mongoose';
-import connectDB from '../db/easyvet_dbconn';
-
-const db = connectDB;
+import mongoose from 'mongoose';
 
 export const activity_categories = [
-	'customer', 'animal', 'appointment', 'consultation', 'vaccination',
-	'laboratory', 'surgery', 'hospitalization', 'billing', 'inventory',
-	'user', 'doctor', 'system'
+	'customer',
+	'animal',
+	'appointment',
+	'consultation',
+	'vaccination',
+	'laboratory',
+	'surgery',
+	'hospitalization',
+	'billing',
+	'inventory',
+	'user',
+	'doctor',
+	'system'
 ] as const;
 
 export const activity_actions = [
-	'created', 'updated', 'deleted', 'archived', 'restored',
-	'admitted', 'discharged', 'paid', 'cancelled', 'completed',
-	'administered', 'scheduled', 'viewed', 'exported', 'login', 'logout'
+	'created',
+	'updated',
+	'deleted',
+	'archived',
+	'restored',
+	'admitted',
+	'discharged',
+	'paid',
+	'cancelled',
+	'completed',
+	'administered',
+	'scheduled',
+	'viewed',
+	'exported',
+	'login',
+	'logout'
 ] as const;
 
-const ActivityLogSchema = new Schema(
+const ActivityLogSchema = new mongoose.Schema(
 	{
 		// Who did it
-		performed_by: { type: Schema.Types.String, default: 'System', trim: true },
-		performed_by_id: { type: Schema.Types.ObjectId, ref: 'users' },
+		performed_by: { type: String, default: 'System', trim: true },
+		performed_by_id: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
 
 		// What happened
-		category: { type: Schema.Types.String, enum: activity_categories, required: true },
-		action:   { type: Schema.Types.String, enum: activity_actions,    required: true },
+		category: { type: String, enum: activity_categories, required: true },
+		action: { type: String, enum: activity_actions, required: true },
 
 		// What was affected
-		target_id:   { type: Schema.Types.String }, // any ObjectId as string
-		target_label: { type: Schema.Types.String }, // human-readable name, e.g. "Buddy (Labrador)"
-		description: { type: Schema.Types.String, required: true, trim: true },
+		target_id: { type: String }, // any ObjectId as string
+		target_label: { type: String }, // human-readable name, e.g. "Buddy (Labrador)"
+		description: { type: String, required: true, trim: true },
 
 		// Optional metadata snapshot
-		meta: { type: Schema.Types.Mixed },
+		meta: { type: mongoose.Schema.Types.Mixed },
 
 		// Severity / highlight
 		level: {
-			type: Schema.Types.String,
+			type: String,
 			enum: ['info', 'warning', 'error', 'success'],
 			default: 'info'
 		},
 
-		ip_address: { type: Schema.Types.String, default: '' }
+		ip_address: { type: String, default: '' }
 	},
 	{ timestamps: true }
 );
@@ -49,5 +69,6 @@ const ActivityLogSchema = new Schema(
 ActivityLogSchema.index({ category: 1, createdAt: -1 });
 ActivityLogSchema.index({ performed_by_id: 1, createdAt: -1 });
 
-const ActivityLogModel = db.models.activity_log || db.model('activity_log', ActivityLogSchema);
+const ActivityLogModel =
+	mongoose.models.activity_log || mongoose.model('activity_log', ActivityLogSchema);
 export default ActivityLogModel;

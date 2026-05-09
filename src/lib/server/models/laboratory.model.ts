@@ -1,7 +1,4 @@
-import { Schema } from 'mongoose';
-import { db as _db } from '../db/easyvet_dbconn';
-
-const db = await _db.connect();
+import mongoose, { Schema } from 'mongoose';
 
 export const lab_test_types = [
 	'cbc', // Complete Blood Count
@@ -27,7 +24,11 @@ const LabResultItemSchema = new Schema({
 	value: { type: Schema.Types.String, required: true },
 	unit: { type: Schema.Types.String, default: '' },
 	reference_range: { type: Schema.Types.String, default: '' },
-	flag: { type: Schema.Types.String, enum: ['normal', 'high', 'low', 'critical'], default: 'normal' }
+	flag: {
+		type: Schema.Types.String,
+		enum: ['normal', 'high', 'low', 'critical'],
+		default: 'normal'
+	}
 });
 
 const LaboratorySchema = new Schema(
@@ -74,5 +75,5 @@ const LaboratorySchema = new Schema(
 );
 
 const LaboratoryModel =
-	db.models.laboratory || db.model('laboratory', LaboratorySchema);
+	mongoose.models.laboratory || mongoose.model('laboratory', LaboratorySchema);
 export default LaboratoryModel;

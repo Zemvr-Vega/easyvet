@@ -1,7 +1,4 @@
-import { Schema } from 'mongoose';
-import { db as _db } from '../db/easyvet_dbconn';
-
-const db = await _db.connect();
+import mongoose, { Schema } from 'mongoose';
 
 export const vaccination_types = [
 	'rabies',
@@ -63,5 +60,5 @@ const VaccinationsSchema = new Schema(
 );
 
 const VaccinationsModel =
-	db.models.vaccinations || db.model('vaccinations', VaccinationsSchema);
+	mongoose.models.vaccinations || mongoose.model('vaccinations', VaccinationsSchema);
 export default VaccinationsModel;

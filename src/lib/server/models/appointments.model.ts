@@ -1,7 +1,4 @@
-import { Schema } from 'mongoose';
-import { db as _db } from '../db/easyvet_dbconn';
-
-const db = await _db.connect();
+import mongoose, { Schema } from 'mongoose';
 
 export const appointment_types = [
 	'checkup',
@@ -49,5 +46,5 @@ const AppointmentsSchema = new Schema(
 );
 
 const AppointmentsModel =
-	db.models.appointments || db.model('appointments', AppointmentsSchema);
+	mongoose.models.appointments || mongoose.model('appointments', AppointmentsSchema);
 export default AppointmentsModel;

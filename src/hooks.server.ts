@@ -11,6 +11,7 @@ import {
 } from '$lib/server/rate-limit';
 
 import { SESSION_COOKIE, parseSession } from '$lib/server/session';
+import db from '$lib/server/db/easyvet_dbconn';
 
 const ROUTE_RULES: Array<{
 	match: (pathname: string, method: string) => boolean;
@@ -42,6 +43,8 @@ const ROUTE_RULES: Array<{
 		label: 'page'
 	}
 ];
+
+await db.connect();
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const { request, url, cookies } = event;

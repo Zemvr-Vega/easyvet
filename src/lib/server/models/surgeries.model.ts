@@ -1,7 +1,4 @@
-import { Schema } from 'mongoose';
-import { db as _db } from '../db/easyvet_dbconn';
-
-const db = await _db.connect();
+import mongoose, { Schema } from 'mongoose';
 
 export const surgery_types = [
 	'spay',
@@ -59,7 +56,11 @@ const SurgeriesSchema = new Schema(
 		anesthetist: { type: Schema.Types.String, default: '', trim: true },
 
 		// Anesthesia
-		anesthesia_type: { type: Schema.Types.String, enum: anesthesia_types, default: 'general-injectable' },
+		anesthesia_type: {
+			type: Schema.Types.String,
+			enum: anesthesia_types,
+			default: 'general-injectable'
+		},
 		anesthesia_drugs: [{ type: Schema.Types.String }],
 		anesthesia_notes: { type: Schema.Types.String, default: '' },
 
@@ -95,6 +96,5 @@ const SurgeriesSchema = new Schema(
 	{ timestamps: true }
 );
 
-const SurgeriesModel =
-	db.models.surgeries || db.model('surgeries', SurgeriesSchema);
+const SurgeriesModel = mongoose.models.surgeries || mongoose.model('surgeries', SurgeriesSchema);
 export default SurgeriesModel;

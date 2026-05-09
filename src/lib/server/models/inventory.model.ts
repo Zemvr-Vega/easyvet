@@ -1,7 +1,4 @@
-import { Schema } from 'mongoose';
-import { db as _db } from '../db/easyvet_dbconn';
-
-const db = await _db.connect();
+import mongoose, { Schema } from 'mongoose';
 
 export const inventory_categories = [
 	'medicine',
@@ -44,5 +41,5 @@ const InventorySchema = new Schema(
 // Text index for reactive search
 InventorySchema.index({ name: 'text', sku: 'text', description: 'text' });
 
-const InventoryModel = db.models.inventory || db.model('inventory', InventorySchema);
+const InventoryModel = mongoose.models.inventory || mongoose.model('inventory', InventorySchema);
 export default InventoryModel;

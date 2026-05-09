@@ -4,9 +4,9 @@ import mongoose from 'mongoose';
 
 export const options: ConnectOptions = {
 	dbName: 'easyvet',
-	autoIndex: NODE_ENV !== "production",
+	autoIndex: NODE_ENV !== 'production',
 	bufferCommands: false,
-	maxPoolSize: 100,
+	maxPoolSize: 100
 } as ConnectOptions;
 
 export const db = {
@@ -20,7 +20,7 @@ export const db = {
 		console.log(`MongoDB connected: ${mongoose.connection.host}`);
 
 		return mongoose.connection;
-	},
+	}
 };
 
-export default await db;
+export default db;

@@ -1,7 +1,4 @@
-import { Schema } from 'mongoose';
-import { db as _db } from '../db/easyvet_dbconn';
-
-const db = await _db.connect();
+import mongoose, { Schema } from 'mongoose';
 
 // ── Sub-schemas ────────────────────────────────────────────────────────────────
 
@@ -50,7 +47,15 @@ const MedicalRecordSchema = new Schema(
 
 // ── Main schema ────────────────────────────────────────────────────────────────
 
-export const species_options = ['dog', 'cat', 'bird', 'rabbit', 'reptile', 'fish', 'other'] as const;
+export const species_options = [
+	'dog',
+	'cat',
+	'bird',
+	'rabbit',
+	'reptile',
+	'fish',
+	'other'
+] as const;
 export const sex_options = { MALE: 'male', FEMALE: 'female', UNKNOWN: 'unknown' } as const;
 export const vaccination_options = {
 	UP_TO_DATE: 'up-to-date',
@@ -94,5 +99,5 @@ const AnimalsSchema = new Schema(
 	{ timestamps: true }
 );
 
-const AnimalsModel = db.models.animals || db.model('animals', AnimalsSchema);
+const AnimalsModel = mongoose.models.animals || mongoose.model('animals', AnimalsSchema);
 export default AnimalsModel;
