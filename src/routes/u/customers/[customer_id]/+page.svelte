@@ -1,59 +1,90 @@
 <script lang="ts">
 	import {
-		Building2, Cake, CalendarClock, Mail, MapPin, MapPinned,
-		Mars, PawPrint, Phone, ShoppingBag, Venus, CircleHelp,
-		CirclePlus, ReceiptText, ArrowLeft, Pencil
+		Building2,
+		Cake,
+		CalendarClock,
+		Mail,
+		MapPin,
+		MapPinned,
+		Mars,
+		PawPrint,
+		Phone,
+		ShoppingBag,
+		Venus,
+		CircleHelp,
+		CirclePlus,
+		ReceiptText,
+		ArrowLeft,
+		Pencil
 	} from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 	import { date } from '$lib/utils/helper';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
-	const { customer, animals, recent_invoices, upcoming_appointments, total_billed, total_paid } = data;
+	const { customer, animals, recent_invoices, upcoming_appointments, total_billed, total_paid } =
+		data;
 
 	function formatPHP(amount: number) {
 		return new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(amount);
 	}
 
 	const species_emoji: Record<string, string> = {
-		dog: '🐕', cat: '🐈', bird: '🦜', rabbit: '🐇', reptile: '🦎', fish: '🐟', other: '🐾'
+		dog: '🐕',
+		cat: '🐈',
+		bird: '🦜',
+		rabbit: '🐇',
+		reptile: '🦎',
+		fish: '🐟',
+		other: '🐾'
 	};
 
 	const vaccination_badge: Record<string, string> = {
-		'up-to-date': 'badge-success', overdue: 'badge-error', unknown: 'badge-ghost'
+		'up-to-date': 'badge-success',
+		overdue: 'badge-error',
+		unknown: 'badge-ghost'
 	};
 
 	const invoice_status_badge: Record<string, string> = {
-		draft: 'badge-ghost', sent: 'badge-info', paid: 'badge-success',
-		overdue: 'badge-error', cancelled: 'badge-neutral'
+		draft: 'badge-ghost',
+		sent: 'badge-info',
+		paid: 'badge-success',
+		overdue: 'badge-error',
+		cancelled: 'badge-neutral'
 	};
 </script>
 
-<div class="flex h-full w-full flex-row gap-4">
+<div class="flex h-full w-full flex-row gap-4 p-4">
 	<!-- Left Sidebar: Customer Info -->
 	<section class="ev-panel flex h-full w-72 min-w-64 flex-col gap-4 bg-base-100 p-6">
 		<div class="flex items-center justify-between">
-			<a href={resolve('/u/customers')} class="btn btn-ghost btn-xs gap-1">
+			<a href={resolve('/u/customers')} class="btn gap-1 btn-ghost btn-xs">
 				<ArrowLeft class="size-3" /> Back
 			</a>
-			<a href={resolve(`/u/customers/${customer._id}/edit`)} class="btn btn-ghost btn-xs gap-1">
+			<a href={resolve(`/u/customers/${customer._id}/edit`)} class="btn gap-1 btn-ghost btn-xs">
 				<Pencil class="size-3" /> Edit
 			</a>
 		</div>
 
-		<div class="avatar rounded bg-secondary/20">
-			<div class="flex w-full items-center justify-center py-6 text-4xl font-bold text-secondary-content">
-				{customer.firstname[0]}{customer.lastname[0]}
+		<div class="flex flex-row items-start gap-4">
+			<div class="avatar size-16 rounded bg-secondary/20">
+				<div
+					class="flex w-full items-center justify-center py-6 text-3xl font-bold text-secondary-content"
+				>
+					{customer.firstname[0]}{customer.lastname[0]}
+				</div>
 			</div>
-		</div>
 
-		<div>
-			<span class="text-lg font-bold">
-				{customer.firstname}{customer.middlename ? ' ' + customer.middlename[0] + '.' : ''} {customer.lastname}
-			</span>
-			<p class="text-xs text-base-content/50">
-				Customer since {date.formatDate({ date: customer.createdAt, format: 'MMM yyyy' })}
-			</p>
+			<div class="min-w-0 grow overflow-hidden">
+				<span class="block w-full max-w-full truncate text-lg font-bold">
+					{customer.firstname}{customer.middlename ? ' ' + customer.middlename[0] + '.' : ''}
+					{customer.lastname}aaaaaaaaaaaa
+				</span>
+				<p class="text-[.65rem] text-base-content/50">
+					<span class="hidden md:inline">Customer since</span>
+					<span>{date.formatDate({ date: customer.createdAt, format: 'MMM yyyy' })}</span>
+				</p>
+			</div>
 		</div>
 
 		<div class="grid grid-cols-2 gap-2">
@@ -67,50 +98,68 @@
 			</div>
 		</div>
 
-		<div class="divider divider-thin my-0"></div>
+		<div class="divider-thin divider my-0"></div>
 
 		<div class="relative min-h-0 w-full grow overflow-y-auto">
 			<table class="w-full max-w-full border-separate border-spacing-y-3">
 				<thead>
-					<tr><th colspan="2" class="text-left text-xs text-base-content/40 uppercase tracking-wider">Contact</th></tr>
+					<tr
+						><th colspan="2" class="text-left text-xs tracking-wider text-base-content/40 uppercase"
+							>Contact</th
+						></tr
+					>
 				</thead>
 				<tbody>
 					<tr class="text-sm">
 						<td class="pr-2"><Phone class="size-4 text-base-content/30" /></td>
-						<td class="leading-4 text-xs">{customer.contact_number || '—'}</td>
+						<td class="text-xs leading-4">{customer.contact_number || '—'}</td>
 					</tr>
 					<tr class="text-sm">
 						<td class="pr-2"><Mail class="size-4 text-base-content/30" /></td>
-						<td class="break-all leading-4 text-xs">{customer.email || '—'}</td>
+						<td class="text-xs leading-4 break-all">{customer.email || '—'}</td>
 					</tr>
 				</tbody>
 				<thead>
-					<tr><th colspan="2" class="pt-2 text-left text-xs text-base-content/40 uppercase tracking-wider">Address</th></tr>
+					<tr
+						><th
+							colspan="2"
+							class="pt-2 text-left text-xs tracking-wider text-base-content/40 uppercase"
+							>Address</th
+						></tr
+					>
 				</thead>
 				<tbody>
 					{#if customer.address_line}
 						<tr class="text-sm">
 							<td class="pr-2"><MapPin class="size-4 text-base-content/30" /></td>
-							<td class="leading-4 text-xs">
-								{customer.address_house_number ? `#${customer.address_house_number} ` : ''}{customer.address_line}
+							<td class="text-xs leading-4">
+								{customer.address_house_number
+									? `#${customer.address_house_number} `
+									: ''}{customer.address_line}
 							</td>
 						</tr>
 					{/if}
 					{#if customer.address_barangay}
 						<tr class="text-sm">
 							<td class="pr-2"><MapPinned class="size-4 text-base-content/30" /></td>
-							<td class="leading-4 text-xs">{customer.address_barangay}</td>
+							<td class="text-xs leading-4">{customer.address_barangay}</td>
 						</tr>
 					{/if}
 					<tr class="text-sm">
 						<td class="pr-2"><Building2 class="size-4 text-base-content/30" /></td>
-						<td class="leading-4 text-xs">
+						<td class="text-xs leading-4">
 							{[customer.address_city, customer.address_province].filter(Boolean).join(', ') || '—'}
 						</td>
 					</tr>
 				</tbody>
 				<thead>
-					<tr><th colspan="2" class="pt-2 text-left text-xs text-base-content/40 uppercase tracking-wider">Personal</th></tr>
+					<tr
+						><th
+							colspan="2"
+							class="pt-2 text-left text-xs tracking-wider text-base-content/40 uppercase"
+							>Personal</th
+						></tr
+					>
 				</thead>
 				<tbody>
 					<tr class="text-sm">
@@ -123,14 +172,14 @@
 								<CircleHelp class="size-4 text-base-content/30" />
 							{/if}
 						</td>
-						<td class="leading-4 text-xs">
+						<td class="text-xs leading-4">
 							{customer.sex === 1 ? 'Male' : customer.sex === 2 ? 'Female' : 'Not indicated'}
 						</td>
 					</tr>
 					{#if customer.birthdate}
 						<tr class="text-sm">
 							<td class="pr-2"><Cake class="size-4 text-base-content/30" /></td>
-							<td class="leading-4 text-xs">
+							<td class="text-xs leading-4">
 								{date.formatDate({ date: customer.birthdate, format: 'MMMM dd, yyyy' })}
 							</td>
 						</tr>
@@ -143,14 +192,16 @@
 	<!-- Right: Tabs -->
 	<section class="tabs-lift tabs min-w-0 grow">
 		<!-- Appointments Tab -->
-		<label class="tab border-transparent bg-transparent px-4 checked:bg-base-100 has-checked:bg-base-100">
+		<label
+			class="tab border-transparent bg-transparent px-4 checked:bg-base-100 has-checked:bg-base-100"
+		>
 			<input type="radio" name="tab_customer" checked />
 			<CalendarClock class="me-2 size-4" /> Appointments
 		</label>
 		<div class="tab-content rounded-ss-none border-transparent bg-base-100 p-4">
 			<div class="mb-3 flex items-center justify-between">
-				<p class="text-xs font-semibold uppercase tracking-wider text-base-content/50">Upcoming</p>
-				<a href={resolve('/u/appointments')} class="btn btn-xs btn-primary btn-soft gap-1">
+				<p class="text-xs font-semibold tracking-wider text-base-content/50 uppercase">Upcoming</p>
+				<a href={resolve('/u/appointments')} class="btn gap-1 btn-soft btn-xs btn-primary">
 					<CirclePlus class="size-3" /> New
 				</a>
 			</div>
@@ -164,11 +215,17 @@
 						</div>
 						<div class="flex-1">
 							<h1 class="text-sm font-semibold">{appt.animal_id?.name ?? '—'}</h1>
-							<p class="text-xs text-base-content/50 capitalize">{appt.type} · Dr. {appt.veterinarian}</p>
+							<p class="text-xs text-base-content/50 capitalize">
+								{appt.type} · Dr. {appt.veterinarian}
+							</p>
 						</div>
 						<div class="text-right text-xs">
-							<p class="font-semibold">{date.formatDate({ date: appt.scheduled_at, format: 'MMM dd, yyyy' })}</p>
-							<p class="text-base-content/50">{date.formatDate({ date: appt.scheduled_at, format: 'hh:mm aa' })}</p>
+							<p class="font-semibold">
+								{date.formatDate({ date: appt.scheduled_at, format: 'MMM dd, yyyy' })}
+							</p>
+							<p class="text-base-content/50">
+								{date.formatDate({ date: appt.scheduled_at, format: 'hh:mm aa' })}
+							</p>
 						</div>
 					</li>
 				{:else}
@@ -180,20 +237,27 @@
 		</div>
 
 		<!-- Pets Tab -->
-		<label class="tab border-transparent bg-transparent px-4 checked:bg-base-100 has-checked:bg-base-100">
+		<label
+			class="tab border-transparent bg-transparent px-4 checked:bg-base-100 has-checked:bg-base-100"
+		>
 			<input type="radio" name="tab_customer" />
 			<PawPrint class="me-2 size-4" /> Pets ({animals.length})
 		</label>
 		<div class="tab-content border-transparent bg-base-100 p-4">
 			<div class="mb-3 flex items-center justify-between">
-				<p class="text-xs font-semibold uppercase tracking-wider text-base-content/50">Registered Animals</p>
-				<a href={resolve(`/u/animals/new?customer_id=${customer._id}`)} class="btn btn-xs btn-primary btn-soft gap-1">
+				<p class="text-xs font-semibold tracking-wider text-base-content/50 uppercase">
+					Registered Animals
+				</p>
+				<a
+					href={resolve(`/u/animals/new?customer_id=${customer._id}`)}
+					class="btn gap-1 btn-soft btn-xs btn-primary"
+				>
 					<CirclePlus class="size-3" /> Register Pet
 				</a>
 			</div>
 			<ul class="list">
 				{#each animals as animal}
-					<li class="list-row items-center hover:bg-base-200 rounded-lg">
+					<li class="list-row items-center rounded-lg hover:bg-base-200">
 						<div class="avatar rounded bg-secondary/10">
 							<div class="flex size-10 items-center justify-center text-xl">
 								{species_emoji[animal.species] ?? '🐾'}
@@ -206,10 +270,12 @@
 							</p>
 						</div>
 						<div class="flex items-center gap-2">
-							<span class="badge badge-xs {vaccination_badge[animal.vaccination_status]} capitalize">
+							<span
+								class="badge badge-xs {vaccination_badge[animal.vaccination_status]} capitalize"
+							>
 								{animal.vaccination_status.replace('-', ' ')}
 							</span>
-							<a href={resolve(`/u/animals/${animal._id}`)} class="btn btn-xs btn-ghost">View →</a>
+							<a href={resolve(`/u/animals/${animal._id}`)} class="btn btn-ghost btn-xs">View →</a>
 						</div>
 					</li>
 				{:else}
@@ -221,14 +287,21 @@
 		</div>
 
 		<!-- Invoices Tab -->
-		<label class="tab border-transparent bg-transparent px-4 checked:bg-base-100 has-checked:bg-base-100">
+		<label
+			class="tab border-transparent bg-transparent px-4 checked:bg-base-100 has-checked:bg-base-100"
+		>
 			<input type="radio" name="tab_customer" />
 			<ShoppingBag class="me-2 size-4" /> Invoices
 		</label>
 		<div class="tab-content border-transparent bg-base-100 p-4">
 			<div class="mb-3 flex items-center justify-between">
-				<p class="text-xs font-semibold uppercase tracking-wider text-base-content/50">Recent Invoices</p>
-				<a href={resolve(`/u/billing/new?customer_id=${customer._id}`)} class="btn btn-xs btn-primary btn-soft gap-1">
+				<p class="text-xs font-semibold tracking-wider text-base-content/50 uppercase">
+					Recent Invoices
+				</p>
+				<a
+					href={resolve(`/u/billing/new?customer_id=${customer._id}`)}
+					class="btn gap-1 btn-soft btn-xs btn-primary"
+				>
 					<ReceiptText class="size-3" /> New Invoice
 				</a>
 			</div>
@@ -243,10 +316,12 @@
 							<td>{date.formatDate({ date: inv.createdAt, format: 'MMM dd, yyyy' })}</td>
 							<td class="font-semibold">{formatPHP(inv.total)}</td>
 							<td>
-								<span class="badge badge-xs {invoice_status_badge[inv.status]} capitalize">{inv.status}</span>
+								<span class="badge badge-xs {invoice_status_badge[inv.status]} capitalize"
+									>{inv.status}</span
+								>
 							</td>
 							<td>
-								<a href={resolve(`/u/billing/${inv._id}`)} class="btn btn-xs btn-ghost">View</a>
+								<a href={resolve(`/u/billing/${inv._id}`)} class="btn btn-ghost btn-xs">View</a>
 							</td>
 						</tr>
 					{:else}
