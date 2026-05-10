@@ -17,20 +17,22 @@
 
 <fieldset class="fieldset w-full">
 	<label class="label" for={name}>
-		{#if required}<span class="text-error mr-0.5">*</span>{/if}
 		<span>{label}</span>
+		{#if required}<span class="mr-0.5 text-error">*</span>{/if}
 	</label>
 	<input
 		id={name}
 		type="date"
 		{name}
-		class={['input input-sm w-full', style, has_error ? 'input-error' : ''].filter(Boolean).join(' ')}
+		class={['input input-sm w-full', style, has_error ? 'input-error' : '']
+			.filter(Boolean)
+			.join(' ')}
 		aria-invalid={has_error || undefined}
 		bind:value
 		{...constraints}
 	/>
 	{#if has_error}
-		<p class="label text-error text-xs mt-0.5">{Array.isArray(errors) ? errors[0] : errors}</p>
+		<p class="label mt-0.5 text-xs text-error">{Array.isArray(errors) ? errors[0] : errors}</p>
 	{/if}
 	{#if children}{@render children()}{/if}
 </fieldset>
